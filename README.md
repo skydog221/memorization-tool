@@ -6,7 +6,7 @@
 
 ## 快速开始
 
-打开[网页待补充](https://beisong.mbod.me/)，输入框中输入 q-a 信息串，点击开始即可！
+打开[beisong.mbod.me 主域名](https://beisong.mbod.me/) 或者 [beisong.netlify.app 备份网址](https://beisong.netlify.app/)，输入框中输入 q-a 信息串，点击开始即可！
 
 > **Tip：可以使用 AI 根据背诵内容获取信息串~**
 
@@ -65,7 +65,3 @@
 ## 许可证
 
 本项目根据 [Mozilla Public License 2.0 (MPL-2.0)](LICENSE) 许可证发布。详细信息请参阅 `LICENSE` 文件。
-
-```
-
-```
