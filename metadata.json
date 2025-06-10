@@ -1,0 +1,5 @@
+
+{
+  "name": "Memorization Tool",
+  "description": "A frontend tool to help with memorization using question-answer pairs. Supports diff checking and a mistake book. Users can input Q&A data, practice, and track mistakes."
+}

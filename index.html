@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memorization Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Custom scrollbar for better aesthetics if needed */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+      /* Ensure body takes full height for sticky footer like behavior if needed */
+      html, body, #root {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      body {
+        font-family: 'Inter', sans-serif; /* A nice sans-serif font */
+      }
+      /* Add a subtle background pattern or gradient for more appeal */
+      body {
+        background-color: #f3f4f6; /* Light gray background */
+      }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "react-toastify/": "https://esm.sh/react-toastify@^11.0.5/",
+    "react-toastify": "https://esm.sh/react-toastify@^11.0.5"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="text-gray-800">
+    <div id="root" class="flex-grow"></div>
+    <script type="module" src="/index.tsx"></script>
+</body>
+</html>
