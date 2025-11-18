@@ -40,10 +40,6 @@ const RecitationPage: React.FC<RecitationPageProps> = ({
   const currentQA = qaList[currentIndex];
 
   const handleSubmit = () => {
-    if (!userAnswer.trim()) {
-      toast.error("答案不能为空。");
-      return;
-    }
     setIsSubmitted(true);
     setShowDiff(true);
     // 不自动加入错题本，仅展示diff
