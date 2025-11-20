@@ -58,11 +58,6 @@ const DiffDisplay: React.FC<DiffDisplayProps> = ({ standard, user }) => {
   const aligned = alignDiffs(standard, user);
   const leftRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
-  const [tooltip, setTooltip] = useState<{
-    text: string;
-    x: number;
-    y: number;
-  } | null>(null);
 
   // 滚动同步
   const handleScroll = (from: "left" | "right") => {
@@ -81,51 +76,21 @@ const DiffDisplay: React.FC<DiffDisplayProps> = ({ standard, user }) => {
 
       let color = "";
       if (seg.type === "added" && side === "user") {
-        color = "bg-green-200 text-green-800";
+        color = "bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border-b-2 border-green-400";
       } else if (seg.type === "removed" && side === "standard") {
-        color = "bg-red-200 text-red-800"; // 移除 line-through
+        color = "bg-gradient-to-r from-red-100 to-rose-100 text-red-800 border-b-2 border-red-400";
       } else if (seg.type === "substituted") {
         if (side === "user") {
-          color = "bg-green-200 text-green-800";
+          color = "bg-gradient-to-r from-amber-100 to-yellow-100 text-amber-800 border-b-2 border-amber-400";
         } else {
-          color = "bg-red-200 text-red-800";
+          color = "bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border-b-2 border-blue-400";
         }
-      }
-
-      // Tooltip 逻辑
-      let tooltipContent = "";
-      let shouldShowTooltip = false;
-
-      if (seg.type === "substituted") {
-        shouldShowTooltip = true;
-        tooltipContent =
-          side === "user"
-            ? `标准答案：${seg.standardDisplay}`
-            : `你的答案：${seg.userDisplay}`;
-      } else if (seg.type === "added" && side === "user") {
-        shouldShowTooltip = true;
-        tooltipContent = "标准答案此处无此内容";
-      } else if (seg.type === "removed" && side === "standard") {
-        shouldShowTooltip = true;
-        tooltipContent = "你的答案此处无此内容";
       }
 
       return (
         <span
           key={idx}
-          className={color}
-          onMouseEnter={
-            shouldShowTooltip
-              ? (e) => {
-                  setTooltip({
-                    text: tooltipContent,
-                    x: e.clientX,
-                    y: e.clientY,
-                  });
-                }
-              : undefined
-          }
-          onMouseLeave={shouldShowTooltip ? () => setTooltip(null) : undefined}
+          className={`${color} transition-all duration-200 hover:brightness-95 rounded px-0.5`}
         >
           {text}
         </span>
@@ -133,40 +98,72 @@ const DiffDisplay: React.FC<DiffDisplayProps> = ({ standard, user }) => {
     });
 
   return (
-    <div className="relative flex flex-col md:flex-row gap-4">
-      <div className="flex-1">
-        <div className="font-semibold text-gray-600 mb-1">你的答案</div>
-        <div
-          ref={leftRef}
-          onScroll={() => handleScroll("left")}
-          className="h-40 overflow-auto border border-gray-300 rounded bg-white p-2 whitespace-pre-wrap text-base font-mono"
-        >
-          {renderSide("user")}
+    <div className="relative">
+      {/* 标题说明 */}
+      <div className="mb-4 glass-effect rounded-xl p-4 border border-indigo-200/50">
+        <div className="flex items-center justify-center space-x-6 text-sm">
+          <div className="flex items-center space-x-2">
+            <div className="w-4 h-4 bg-gradient-to-r from-green-200 to-emerald-200 rounded border-2 border-green-400"></div>
+            <span className="text-gray-700">新增内容</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className="w-4 h-4 bg-gradient-to-r from-red-200 to-rose-200 rounded border-2 border-red-400"></div>
+            <span className="text-gray-700">缺失内容</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <div className="w-4 h-4 bg-gradient-to-r from-amber-200 to-yellow-200 rounded border-2 border-amber-400"></div>
+            <span className="text-gray-700">替换内容</span>
+          </div>
         </div>
       </div>
-      <div className="flex-1">
-        <div className="font-semibold text-gray-600 mb-1">标准答案</div>
-        <div
-          ref={rightRef}
-          onScroll={() => handleScroll("right")}
-          className="h-40 overflow-auto border border-gray-300 rounded bg-white p-2 whitespace-pre-wrap text-base font-mono"
-        >
-          {renderSide("standard")}
+
+      {/* 对比区域 */}
+      <div className="flex flex-col md:flex-row gap-4">
+        {/* 用户答案 */}
+        <div className="flex-1">
+          <div className="flex items-center space-x-2 mb-3">
+            <div className="w-1 h-6 bg-gradient-to-b from-indigo-500 to-purple-500 rounded-full"></div>
+            <h3 className="font-bold text-lg bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              你的答案
+            </h3>
+          </div>
+          <div
+            ref={leftRef}
+            onScroll={() => handleScroll("left")}
+            className="h-48 overflow-auto glass-effect border border-indigo-200/50 rounded-xl p-4 whitespace-pre-wrap text-base leading-relaxed shadow-lg hover:shadow-xl transition-shadow duration-300 custom-scrollbar"
+          >
+            {renderSide("user")}
+          </div>
+        </div>
+
+        {/* 分隔符 */}
+        <div className="hidden md:flex items-center justify-center">
+          <div className="w-px h-48 bg-gradient-to-b from-transparent via-gray-300 to-transparent"></div>
+          <div className="absolute bg-white rounded-full p-2 shadow-lg">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-gray-400">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+            </svg>
+          </div>
+        </div>
+
+        {/* 标准答案 */}
+        <div className="flex-1">
+          <div className="flex items-center space-x-2 mb-3">
+            <div className="w-1 h-6 bg-gradient-to-b from-green-500 to-emerald-500 rounded-full"></div>
+            <h3 className="font-bold text-lg bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+              标准答案
+            </h3>
+          </div>
+          <div
+            ref={rightRef}
+            onScroll={() => handleScroll("right")}
+            className="h-48 overflow-auto glass-effect border border-green-200/50 rounded-xl p-4 whitespace-pre-wrap text-base leading-relaxed shadow-lg hover:shadow-xl transition-shadow duration-300 custom-scrollbar"
+          >
+            {renderSide("standard")}
+          </div>
         </div>
       </div>
-      {tooltip && (
-        <div
-          style={{
-            position: "fixed",
-            left: tooltip.x + 10,
-            top: tooltip.y + 10,
-            zIndex: 1000,
-          }}
-          className="pointer-events-none bg-black bg-opacity-80 text-white text-xs rounded px-2 py-1 shadow-lg"
-        >
-          {tooltip.text}
-        </div>
-      )}
+
     </div>
   );
 };

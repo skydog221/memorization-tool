@@ -29,6 +29,7 @@
 - **灵活的导入方式**：
   - 支持直接在网页上输入 JSON 格式的问题与答案对
   - 支持上传 JSON 文件（格式：`[{"q":"问题","a":"答案"}]`）
+  - **支持通过 URL 参数预加载题库**（见下方说明）
   - \*建议由 AI 生成 JSON 数据
 - **数据持久化**：
   - 所有题目和错题本数据自动保存到浏览器本地存储
@@ -80,6 +81,66 @@
   - 进度指示
   - 清晰的导航系统
 
+## URL 参数预加载题库
+
+你可以通过在 URL 中添加 `data` 参数来预加载题库，应用会自动解析并开始背诵。
+
+### 使用方法
+
+#### 方式一：直接传递 JSON（适合小数据量）
+
+```
+https://beisong.mbod.me/?data=[{"q":"问题1","a":"答案1"},{"q":"问题2","a":"答案2"}]
+```
+
+**注意**：URL 中的特殊字符需要进行 URL 编码，例如：
+- `[` → `%5B`
+- `]` → `%5D`
+- `"` → `%22`
+- `,` → `%2C`
+
+完整示例：
+```
+https://beisong.mbod.me/?data=%5B%7B%22q%22%3A%22React%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%22%2C%22a%22%3A%22%E4%B8%80%E4%B8%AAJavaScript%E5%BA%93%22%7D%5D
+```
+
+#### 方式二：使用 Base64 编码（推荐，适合大数据量）
+
+1. 准备 JSON 数据：
+```json
+[{"q":"问题1","a":"答案1"},{"q":"问题2","a":"答案2"}]
+```
+
+2. 对 JSON 字符串进行 Base64 编码
+
+3. 将编码结果作为 `data` 参数：
+```
+https://beisong.mbod.me/?data=W3sicSI6IumXrumimjEiLCJhIjoi562U5qGIMSJ9LHsicSI6IumXrumimjIiLCJhIjoi562U5qGIMiJ9XQ==
+```
+
+### 生成编码链接的 JavaScript 代码示例
+
+```javascript
+// 方式一：URL 编码
+const questions = [{"q":"问题1","a":"答案1"}];
+const jsonStr = JSON.stringify(questions);
+const urlEncoded = encodeURIComponent(jsonStr);
+const url = `https://beisong.mbod.me/?data=${urlEncoded}`;
+
+// 方式二：Base64 编码（推荐）
+const questions = [{"q":"问题1","a":"答案1"}];
+const jsonStr = JSON.stringify(questions);
+const base64Encoded = btoa(jsonStr);
+const url = `https://beisong.mbod.me/?data=${base64Encoded}`;
+```
+
+### 特点
+
+- 自动识别编码格式（Base64 或直接 JSON）
+- 自动验证数据格式
+- 加载成功后直接进入背诵页面
+- 会清空之前的会话和错题本，开始新的背诵
+
 ## 如何开发
 
 请确保你的系统已安装 [Node.js](https://nodejs.org/) 和 [pnpm](https://pnpm.io/)。
@@ -104,7 +165,7 @@
    pnpm dev
    ```
 
-   项目将在本地的某个端口（通常是 `http://localhost:5173/` 或 `http://localhost:5174/`）启动。在浏览器中打开该地址即可访问。
+   项目将在本地的某个端口（通常是 `http://localhost:5173/`）启动。在浏览器中打开该地址即可访问。
 
 ## 技术栈
 

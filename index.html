@@ -7,34 +7,111 @@
     <title>Memorization Tool</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      /* Custom scrollbar for better aesthetics if needed */
+      /* 导入现代字体 */
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+      
+      /* 自定义滚动条 - 更现代的设计 */
       ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
+        width: 10px;
+        height: 10px;
       }
       ::-webkit-scrollbar-track {
-        background: #f1f1f1;
+        background: linear-gradient(to bottom, #f0f4f8, #e2e8f0);
         border-radius: 10px;
       }
       ::-webkit-scrollbar-thumb {
-        background: #888;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         border-radius: 10px;
+        transition: all 0.3s ease;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #555;
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
       }
-      /* Ensure body takes full height for sticky footer like behavior if needed */
+      
+      /* 确保body占据全部高度 */
       html, body, #root {
         height: 100%;
         display: flex;
         flex-direction: column;
       }
+      
       body {
-        font-family: 'Inter', sans-serif; /* A nice sans-serif font */
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+        margin: 0;
+        padding: 0;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
-      /* Add a subtle background pattern or gradient for more appeal */
+      
+      /* 渐变背景 - 教育主题配色 */
       body {
-        background-color: #f3f4f6; /* Light gray background */
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background-attachment: fixed;
+        position: relative;
+      }
+      
+      /* 添加动态背景图案 */
+      body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image:
+          radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.08) 0%, transparent 50%),
+          radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+        pointer-events: none;
+        z-index: 0;
+      }
+      
+      /* 全局动画效果 */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      
+      /* 卡片悬停效果 */
+      @keyframes cardHover {
+        0%, 100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-5px);
+        }
+      }
+      
+      /* 渐变文字效果 */
+      .gradient-text {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      
+      /* 毛玻璃效果 */
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
       }
     </style>
 <script type="importmap">

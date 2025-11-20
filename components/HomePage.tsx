@@ -117,17 +117,54 @@ const HomePage: React.FC<HomePageProps> = ({
   const exampleJson = '[{"q":"React 是什么？","a":"一个 JavaScript 库。"}]';
 
   return (
-    <div className="space-y-8">
-      <div className="bg-white shadow-xl rounded-lg p-6 sm:p-8">
-        <h2 className="text-3xl font-bold text-gray-800 mb-6 border-b pb-4">
-          新建或导入题库
-        </h2>
-        <p className="text-gray-600 mb-4">
-          请在下方输入你的题目和答案（JSON 格式），或直接上传 JSON 文件。例如：
-          <code>{exampleJson}</code>
-        </p>
+    <div className="space-y-8 animate-fadeIn">
+      <div className="glass-effect shadow-2xl rounded-2xl p-6 sm:p-8 border border-white/20 hover:shadow-3xl transition-all duration-300">
+        <div className="flex items-center mb-6 pb-4 border-b border-gradient-to-r from-indigo-200 to-purple-200">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+            className="w-8 h-8 text-indigo-600 mr-3"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 10.5v6m3-3H9m4.06-7.19-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"
+            />
+          </svg>
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            新建或导入题库
+          </h2>
+        </div>
+        <div className="mb-4 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl border border-indigo-100">
+          <p className="text-gray-700 mb-2 flex items-start">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="w-5 h-5 text-indigo-600 mr-2 mt-0.5 flex-shrink-0"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
+              />
+            </svg>
+            <span>
+              请在下方输入你的题目和答案（JSON 格式），或直接上传 JSON 文件。
+              <br />
+              <code className="text-sm bg-white px-2 py-1 rounded mt-1 inline-block border border-indigo-200">
+                {exampleJson}
+              </code>
+            </span>
+          </p>
+        </div>
         <textarea
-          className="w-full h-40 p-3 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition duration-150 ease-in-out mb-4"
+          className="w-full h-40 p-4 border-2 border-gray-200 rounded-xl shadow-sm focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400 transition-all duration-300 ease-in-out mb-4 font-mono text-sm bg-white/80 backdrop-blur-sm hover:bg-white"
           placeholder='[{"q":"你的问题1","a":"你的答案1"}, {"q":"你的问题2","a":"你的答案2"}]'
           value={jsonInput}
           onChange={(e) => {
@@ -137,11 +174,25 @@ const HomePage: React.FC<HomePageProps> = ({
           }}
           disabled={!!selectedFile}
         />
-        <div className="mb-4">
+        <div className="mb-4 p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border-2 border-dashed border-purple-200 hover:border-purple-400 transition-all duration-300">
           <label
             htmlFor="json-file-upload"
-            className="block text-sm font-medium text-gray-700 mb-1"
+            className="flex items-center text-sm font-semibold text-gray-700 mb-2 cursor-pointer"
           >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="w-5 h-5 text-purple-600 mr-2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"
+              />
+            </svg>
             或选择 JSON 文件上传：
           </label>
           <input
@@ -149,12 +200,28 @@ const HomePage: React.FC<HomePageProps> = ({
             type="file"
             accept=".json"
             onChange={handleFileChange}
-            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100"
+            className="block w-full text-sm text-gray-600 file:mr-4 file:py-2.5 file:px-5 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gradient-to-r file:from-purple-500 file:to-pink-500 file:text-white hover:file:from-purple-600 hover:file:to-pink-600 file:transition-all file:duration-300 file:shadow-md hover:file:shadow-lg cursor-pointer"
           />
           {selectedFile && (
-            <p className="mt-2 text-sm text-gray-600">
-              已选择文件: {selectedFile.name}
-            </p>
+            <div className="mt-3 flex items-center p-2 bg-white rounded-lg border border-purple-200">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="w-5 h-5 text-green-500 mr-2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                />
+              </svg>
+              <p className="text-sm font-medium text-gray-700">
+                已选择文件: <span className="text-purple-600">{selectedFile.name}</span>
+              </p>
+            </div>
           )}
         </div>
         {inputError && (
