@@ -1,6 +1,7 @@
 import React, { useState, ChangeEvent } from "react";
 import { QAItem } from "../types";
 import { toast } from "react-toastify";
+import { PRESET_QUESTION_BANKS } from "../constants";
 
 interface HomePageProps {
   onStartNewSession: (questions: QAItem[]) => void;
@@ -114,10 +115,99 @@ const HomePage: React.FC<HomePageProps> = ({
   const hasActiveSession =
     allQuestions.length > 0 && currentQuestionIndex < allQuestions.length;
 
+  const handleLoadPresetBank = (bankKey: "bank1" | "bank2") => {
+    const questions = PRESET_QUESTION_BANKS[bankKey];
+    onStartNewSession(questions);
+    toast.success(
+      `已加载预设题库：${bankKey === "bank1" ? "题库一" : "题库二"}`
+    );
+  };
+
   const exampleJson = '[{"q":"React 是什么？","a":"一个 JavaScript 库。"}]';
 
   return (
     <div className="space-y-8 animate-fadeIn">
+      <div className="glass-effect shadow-2xl rounded-2xl p-6 sm:p-8 border border-white/20 hover:shadow-3xl transition-all duration-300">
+        <div className="flex items-center mb-6 pb-4 border-b border-gradient-to-r from-green-200 to-blue-200">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+            className="w-8 h-8 text-green-600 mr-3"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
+            />
+          </svg>
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
+            预设题库
+          </h2>
+        </div>
+        <p className="text-gray-700 mb-4 flex items-start">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+            className="w-5 h-5 text-green-600 mr-2 mt-0.5 flex-shrink-0"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
+            />
+          </svg>
+          <span>快速开始练习，点击下方按钮加载预设题库</span>
+        </p>
+        <div className="flex flex-col sm:flex-row gap-3">
+          <button
+            onClick={() => handleLoadPresetBank("bank1")}
+            className="flex-1 bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-150 ease-in-out transform hover:scale-105 flex items-center justify-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-5 h-5 mr-2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
+              />
+            </svg>
+            八上道法全
+          </button>
+          <button
+            onClick={() => handleLoadPresetBank("bank2")}
+            className="flex-1 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-150 ease-in-out transform hover:scale-105 flex items-center justify-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-5 h-5 mr-2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
+              />
+            </svg>
+            八上道法打星
+          </button>
+        </div>
+      </div>
+
       <div className="glass-effect shadow-2xl rounded-2xl p-6 sm:p-8 border border-white/20 hover:shadow-3xl transition-all duration-300">
         <div className="flex items-center mb-6 pb-4 border-b border-gradient-to-r from-indigo-200 to-purple-200">
           <svg
@@ -219,7 +309,8 @@ const HomePage: React.FC<HomePageProps> = ({
                 />
               </svg>
               <p className="text-sm font-medium text-gray-700">
-                已选择文件: <span className="text-purple-600">{selectedFile.name}</span>
+                已选择文件:{" "}
+                <span className="text-purple-600">{selectedFile.name}</span>
               </p>
             </div>
           )}
