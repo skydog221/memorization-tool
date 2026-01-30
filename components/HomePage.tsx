@@ -34,11 +34,11 @@ const HomePage: React.FC<HomePageProps> = ({
       if (
         !Array.isArray(parsed) ||
         !parsed.every(
-          (item) => typeof item.q === "string" && typeof item.a === "string"
+          (item) => typeof item.q === "string" && typeof item.a === "string",
         )
       ) {
         setInputError(
-          'JSON 格式无效。期望是一个包含 "q" 和 "a" 字符串属性的对象数组。例如：[{"q":"问题","a":"答案"}]'
+          'JSON 格式无效。期望是一个包含 "q" 和 "a" 字符串属性的对象数组。例如：[{"q":"问题","a":"答案"}]',
         );
         return null;
       }
@@ -115,12 +115,9 @@ const HomePage: React.FC<HomePageProps> = ({
   const hasActiveSession =
     allQuestions.length > 0 && currentQuestionIndex < allQuestions.length;
 
-  const handleLoadPresetBank = (bankKey: "bank1" | "bank2") => {
+  const handleLoadPresetBank = (bankKey: "bank1" | "bank2" | "bank3") => {
     const questions = PRESET_QUESTION_BANKS[bankKey];
     onStartNewSession(questions);
-    toast.success(
-      `已加载预设题库：${bankKey === "bank1" ? "题库一" : "题库二"}`
-    );
   };
 
   const exampleJson = '[{"q":"React 是什么？","a":"一个 JavaScript 库。"}]';
@@ -183,7 +180,27 @@ const HomePage: React.FC<HomePageProps> = ({
                 d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
               />
             </svg>
-            八上道法全
+            八上道法1-2
+          </button>
+          <button
+            onClick={() => handleLoadPresetBank("bank3")}
+            className="flex-1 bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition duration-150 ease-in-out transform hover:scale-105 flex items-center justify-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-5 h-5 mr-2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
+              />
+            </svg>
+            八上道法40题
           </button>
           <button
             onClick={() => handleLoadPresetBank("bank2")}
@@ -416,7 +433,7 @@ const HomePage: React.FC<HomePageProps> = ({
               onClick={() => {
                 if (
                   window.confirm(
-                    "确定要清空所有背诵数据和错题本吗？此操作不可撤销。"
+                    "确定要清空所有背诵数据和错题本吗？此操作不可撤销。",
                   )
                 ) {
                   onClearAllData();
