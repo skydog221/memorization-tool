@@ -1,6 +1,6 @@
 
 import { QAItem, SessionData } from '../types';
-import { LOCAL_STORAGE_SESSION_KEY, LOCAL_STORAGE_MISTAKES_KEY } from '../constants';
+import { LOCAL_STORAGE_SESSION_KEY, LOCAL_STORAGE_MISTAKES_KEY, LOCAL_STORAGE_SHUFFLE_KEY } from '../constants';
 
 export class StorageService {
   static saveSession(sessionData: SessionData): void {
@@ -52,6 +52,25 @@ export class StorageService {
       localStorage.removeItem(LOCAL_STORAGE_MISTAKES_KEY);
     } catch (error) {
       console.error("Error clearing mistakes from localStorage:", error);
+    }
+  }
+
+  // 打乱设置相关方法
+  static saveShuffleSetting(enabled: boolean): void {
+    try {
+      localStorage.setItem(LOCAL_STORAGE_SHUFFLE_KEY, JSON.stringify(enabled));
+    } catch (error) {
+      console.error("Error saving shuffle setting to localStorage:", error);
+    }
+  }
+
+  static loadShuffleSetting(): boolean {
+    try {
+      const data = localStorage.getItem(LOCAL_STORAGE_SHUFFLE_KEY);
+      return data ? JSON.parse(data) : false; // 默认不打乱
+    } catch (error) {
+      console.error("Error loading shuffle setting from localStorage:", error);
+      return false;
     }
   }
 }

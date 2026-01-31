@@ -13,8 +13,23 @@ const App: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [currentMistakes, setCurrentMistakes] = useState<QAItem[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [shuffleEnabled, setShuffleEnabled] = useState<boolean>(false);
+
+  // 打乱数组的工具函数（Fisher-Yates 洗牌算法）
+  const shuffleArray = useCallback(<T,>(array: T[]): T[] => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  }, []);
 
   useEffect(() => {
+    // 加载打乱设置
+    const loadedShuffleSetting = StorageService.loadShuffleSetting();
+    setShuffleEnabled(loadedShuffleSetting);
+
     // 尝试从URL参数加载题库
     const urlParams = new URLSearchParams(window.location.search);
     const paramData = urlParams.get('data');
@@ -59,10 +74,12 @@ const App: React.FC = () => {
     
     // 如果从URL加载成功，使用URL数据；否则尝试从本地存储加载
     if (urlQuestions) {
-      setAllQuestions(urlQuestions);
+      // 根据打乱设置处理题目
+      const processedQuestions = loadedShuffleSetting ? shuffleArray(urlQuestions) : urlQuestions;
+      setAllQuestions(processedQuestions);
       setCurrentQuestionIndex(0);
       setCurrentMistakes([]); // 清空错题本
-      StorageService.saveSession({ items: urlQuestions, currentIndex: 0 });
+      StorageService.saveSession({ items: processedQuestions, currentIndex: 0 });
       StorageService.saveMistakes([]);
       // 直接进入背诵页面
       setCurrentView(View.Recitation);
@@ -80,17 +97,19 @@ const App: React.FC = () => {
     }
     
     setIsLoading(false);
-  }, []);
+  }, [shuffleArray]);
 
   const handleStartNewSession = useCallback((questions: QAItem[]) => {
-    setAllQuestions(questions);
+    // 根据打乱设置处理题目
+    const processedQuestions = shuffleEnabled ? shuffleArray(questions) : questions;
+    setAllQuestions(processedQuestions);
     setCurrentQuestionIndex(0);
     setCurrentMistakes([]); // Clear mistakes for a new session
-    StorageService.saveSession({ items: questions, currentIndex: 0 });
+    StorageService.saveSession({ items: processedQuestions, currentIndex: 0 });
     StorageService.saveMistakes([]); // Also clear persisted mistakes
     setCurrentView(View.Recitation);
-    toast.success("New session started!");
-  }, []);
+    toast.success("新会话已开始！");
+  }, [shuffleEnabled, shuffleArray]);
 
   const handleReviewMistakes = useCallback((mistakeQuestions: QAItem[]) => {
     setAllQuestions(mistakeQuestions);
@@ -230,6 +249,12 @@ const App: React.FC = () => {
             onResumeSession={() => setCurrentView(View.Recitation)}
             onViewCurrentMistakes={() => setCurrentView(View.Summary)}
             onClearAllData={handleClearAllData}
+            shuffleEnabled={shuffleEnabled}
+            onShuffleChange={(enabled) => {
+              setShuffleEnabled(enabled);
+              StorageService.saveShuffleSetting(enabled);
+              toast.info(enabled ? "已启用题目打乱" : "已禁用题目打乱");
+            }}
           />
         )}
         {currentView === View.Recitation && allQuestions.length > 0 && (

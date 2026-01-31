@@ -1,5 +1,6 @@
 export const LOCAL_STORAGE_SESSION_KEY = "memorizationToolSession";
 export const LOCAL_STORAGE_MISTAKES_KEY = "memorizationToolMistakes";
+export const LOCAL_STORAGE_SHUFFLE_KEY = "memorizationToolShuffle";
 
 interface QandA {
   q: string;

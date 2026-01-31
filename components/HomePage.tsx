@@ -12,6 +12,8 @@ interface HomePageProps {
   onResumeSession: () => void;
   onViewCurrentMistakes: () => void;
   onClearAllData: () => void;
+  shuffleEnabled: boolean;
+  onShuffleChange: (enabled: boolean) => void;
 }
 
 const HomePage: React.FC<HomePageProps> = ({
@@ -23,6 +25,8 @@ const HomePage: React.FC<HomePageProps> = ({
   onResumeSession,
   onViewCurrentMistakes,
   onClearAllData,
+  shuffleEnabled,
+  onShuffleChange,
 }) => {
   const [jsonInput, setJsonInput] = useState<string>("");
   const [inputError, setInputError] = useState<string>("");
@@ -185,6 +189,48 @@ const HomePage: React.FC<HomePageProps> = ({
               {bankKey}
             </button>
           ))}
+        </div>
+      </div>
+
+      {/* 打乱题目设置 */}
+      <div className="glass-effect shadow-2xl rounded-2xl p-6 sm:p-8 border border-white/20 hover:shadow-3xl transition-all duration-300">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="w-8 h-8 text-purple-600 mr-3"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"
+              />
+            </svg>
+            <div>
+              <h3 className="text-xl font-bold text-gray-800">题目打乱</h3>
+              <p className="text-sm text-gray-600 mt-1">
+                启用后，每次开始新会话时将随机打乱题目顺序
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => onShuffleChange(!shuffleEnabled)}
+            className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 ${
+              shuffleEnabled ? "bg-purple-600" : "bg-gray-300"
+            }`}
+            role="switch"
+            aria-checked={shuffleEnabled}
+          >
+            <span
+              className={`inline-block h-6 w-6 transform rounded-full bg-white shadow-lg transition-transform duration-300 ${
+                shuffleEnabled ? "translate-x-7" : "translate-x-1"
+              }`}
+            />
+          </button>
         </div>
       </div>
 
